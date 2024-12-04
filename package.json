@@ -1,5 +1,16 @@
 {
-  "dependencies": {
-    "kaboom": "^3000.1.17"
-  }
+	"name": "incantus",
+	"scripts": {
+		"build": "esbuild --bundle src/main.ts --outfile=www/main.js --minify",
+		"dev": "esbuild --bundle src/main.ts --outfile=www/main.js --servedir=www",
+		"bundle": "npm run build && mkdir -p dist && zip -r dist/game.zip www -x \"**/.DS_Store\"",
+		"check": "tsc"
+	},
+	"dependencies": {
+		"kaboom": "^3000.1.17"
+	},
+	"devDependencies": {
+		"esbuild": "^0.24.0",
+		"typescript": "^5.7.2"
+	}
 }

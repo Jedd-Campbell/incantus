@@ -1,5 +1,6 @@
 import Character from "../characters/character";
-import Spell, { SpellType } from "./spell";
+import Spell from "./spell";
+import { SpellType } from "./spell-type";
 
 export default class Aquae implements Spell {
 
@@ -10,7 +11,6 @@ export default class Aquae implements Spell {
 
     name: string;
     type: SpellType;
-    fizzle: boolean;
     
     effect(player: Character, target: Character) {
         throw new Error("Method not implemented.");

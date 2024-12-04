@@ -13,7 +13,7 @@ export default class Incantation {
     targetsMatch: any[] = [];
     spellsMatch: any[] = [];
 
-    commands: any[] = [];
+    utterances: (Spell | Character)[] = [];
     command: string = "";
 
     constructor(spells: Spell[], targets: Character[]) {
@@ -45,10 +45,10 @@ export default class Incantation {
             if (key === "space" || key === "enter") {
                 if (this.fullMatch()) {
                     if (this.spellsMatch?.length > 0) {
-                        this.commands.push(this.spellsMatch[0]);
+                        this.utterances.push(this.spellsMatch[0]);
                     }
                     if (this.targetsMatch?.length > 0) {
-                        this.commands.push(this.targetsMatch[0]);
+                        this.utterances.push(this.targetsMatch[0]);
                     }
                 }
                 this.command = "";
@@ -56,12 +56,12 @@ export default class Incantation {
         }
     }
 
-    private resolveCast(key: Key, castSpell: (target, effect) => any) {
+    private resolveCast(key: Key, castSpell: (utterances: (Spell | Character)[]) => any) {
         if (key === "enter") {
             // todo: Resolve cast  
             if(castSpell) {
                 let effect = true; // todo: build effect from incantation
-                castSpell(this.targetsMatch[0], effect);
+                castSpell(this.utterances);
             }
 
             // Reset caster
@@ -70,7 +70,7 @@ export default class Incantation {
             this.command = "";
             this.targetsMatch = this.targets;
             this.spellsMatch = this.spells;
-            this.commands = [];
+            this.utterances = [];
         }
     }
 
@@ -92,7 +92,7 @@ export default class Incantation {
         return this.spellsMatch?.length > 0 || this.targetsMatch?.length > 0;
     }
 
-    getCastText() {
-        return this.commands.map(i => i.name).join(" ") + " " + this.command;
+    getIncantationText() {
+        return this.utterances.map(i => i.name).join(" ") + " " + this.command;
     }
 }

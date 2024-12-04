@@ -6,6 +6,8 @@ import Character from "../characters/character";
 import Stats from "../characters/stats";
 import Spell from "../spells/spell";
 import Ignis from "../spells/ignis";
+import Aquae from "../spells/aquae";
+import SpellEffect from "../spells/spell-effect";
 
 k.scene("game", () => {
 
@@ -13,16 +15,13 @@ k.scene("game", () => {
 
     const player = new Player("auto", new Stats());
     const enemy = new Enemy("minion", new Stats());
+    const targets = [player, enemy];
+    const spells = [
+        new Ignis(),
+        new Aquae(),
+    ];
 
-    let caster = new Incantation(
-        [
-            new Ignis(),
-        ],
-        [
-            player,
-            enemy
-        ]
-    );
+    let caster = new Incantation(spells, targets);
 
     // Controls
     k.onKeyPress((key) => {
@@ -53,41 +52,36 @@ k.scene("game", () => {
     ]);
 
     spellText.onUpdate(() => {
-        spellText.text = caster.getCastText()
+        spellText.text = caster.getIncantationText()
     });
 
     // Game logic
 
+    k.loop(1, () => {
+        targets.forEach((t) => t.applySpellEffects())
+    });
+
     k.onCollide("enemy", "projectile", (a, b) => {
         b.hit = true;
         b.destroy();
-        a.health = Math.max(0, a.health - 10);
+
+        a.stats.health = Math.max(0, a.stats.health - 10);
     })
 
     k.onUpdate("projectile", (a) => {
         a.move(a.dir.scale(projectileSpeed));
     });
 
-    function castSpell(target: Character, incantations: Spell[]) {
+    function castSpell(utterances: (Spell | Character)[]) {
+        
+        console.log(utterances);
 
-        // const d = target.gameObject.pos.sub(player.gameObject.pos).unit();
-        // const a = target.gameObject.pos.angle(target.gameObject.pos);
+        let spellEffect = new SpellEffect();
+        spellEffect.caster = player;
+        spellEffect.target = enemy;
+        spellEffect.applySpellEffect();
 
-        // let projectile = k.add([
-        //     k.pos(player.gameObject.pos.x + 100, player.gameObject.pos.y - 100),
-        //     k.rotate(a),
-        //     k.sprite("fire"),
-        //     k.anchor("center"),
-        //     k.body(),
-        //     k.area(),
-        //     "projectile",
-        //     { dir: d, hit: false },
-        // ]);
-        // k.wait(3, () => {
-        //     if (projectile) {
-        //         projectile.destroy();
-        //     }
-        // });
+
 
     }
 })

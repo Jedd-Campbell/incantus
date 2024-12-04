@@ -15,5 +15,6 @@
 
 ### Polish
 [ ] Make menu pretty
-[ ] Add nice backsgrounds (grass, forest, mountain, cave, lava, castle)
+[ ] Add nice back grounds (grass, forest, mountain, cave, lava, castle)
 [ ] Consistent battlefield size
+[ ] Voice and sound effects

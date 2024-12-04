@@ -1,5 +1,6 @@
 import Character from "../characters/character";
-import Spell, { SpellType } from "./spell";
+import Spell from "./spell";
+import { SpellType } from "./spell-type";
 
 export default class Ignis implements Spell {
 
@@ -10,12 +11,10 @@ export default class Ignis implements Spell {
 
     name: string;
     type: SpellType;
-    fizzle: boolean;
 
     effect(player: Character, target: Character) {
         // Fizzle
         if (!player || !target || target.name === player.name) {
-            this.fizzle = true;
             return;
         };
 

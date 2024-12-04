@@ -1,5 +1,11 @@
-export default interface SpellEffect {
-    healthEffect(): number;
-    manaEffect(): number;
-    damageEffect(): number;
+export default class SpellEffect {
+
+    damage: number;
+    healing: number;
+    
+    ticks: number = 0;
+
+    constructor() {
+
+    }
 }

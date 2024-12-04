@@ -1,13 +1,19 @@
-import SpellType from "./spell-type";
+import Character from "../characters/character";
 
-export default class Spell {
+export const enum SpellType {
+    Root = "Root",
+    Intent = "Intent",
+}
 
+export const enum SpellBehavior {
+    Instant = "Instant",
+    Lingering = "Lingering",
+    Projectile = "Projectile",
+}
+
+export default interface Spell {
     name: string;
     type: SpellType;
     fizzle: boolean;
-    
-    constructor() {
-        this.fizzle = false;
-    }
-    
+    effect(player: Character, target: Character);
 }

@@ -1,31 +1,30 @@
-import { GameObj, Key } from "kaboom";
+import { Key } from "kaboom";
 import Spell from "./spell";
+import Character from "../characters/character";
 
-export default class Caster {
-    player: GameObj;
+export default class Incantation {
     resolved: boolean = false;
     keys: string[] = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m", "enter", "space"];
     previousKey: string = "";
 
-    targets: GameObj[] = [];
+    targets: Character[] = [];
     spells: Spell[] = [];
 
     targetsMatch: any[] = [];
     spellsMatch: any[] = [];
 
-    incantation: any[] = [];
+    commands: any[] = [];
     command: string = "";
 
-    constructor(player: GameObj, spells: Spell[], targets: GameObj[]) {
-        this.player = player;
+    constructor(spells: Spell[], targets: Character[]) {
         this.spells = spells;
         this.targets = targets;
     }
 
     parse(key: Key, castSpell) {
         if (this.keys.includes(key.toString())) {
-            this.resolveCast(key, castSpell);
             this.processCast(key);
+            this.resolveCast(key, castSpell);
             this.previousKey = key;
             this.resolved = false;
         }
@@ -43,13 +42,13 @@ export default class Caster {
             }
 
             // invoke
-            if (key === "space") {
+            if (key === "space" || key === "enter") {
                 if (this.fullMatch()) {
                     if (this.spellsMatch?.length > 0) {
-                        this.incantation.push(this.spellsMatch[0]);
+                        this.commands.push(this.spellsMatch[0]);
                     }
                     if (this.targetsMatch?.length > 0) {
-                        this.incantation.push(this.targetsMatch[0]);
+                        this.commands.push(this.targetsMatch[0]);
                     }
                 }
                 this.command = "";
@@ -57,13 +56,12 @@ export default class Caster {
         }
     }
 
-    private resolveCast(key: Key, castSpell: (player, target, effect) => any) {
+    private resolveCast(key: Key, castSpell: (target, effect) => any) {
         if (key === "enter") {
-            console.log("resolved")
             // todo: Resolve cast  
             if(castSpell) {
                 let effect = true; // todo: build effect from incantation
-                castSpell(this.player, this.targetsMatch[0] ?? this.player, effect);
+                castSpell(this.targetsMatch[0], effect);
             }
 
             // Reset caster
@@ -72,7 +70,7 @@ export default class Caster {
             this.command = "";
             this.targetsMatch = this.targets;
             this.spellsMatch = this.spells;
-            this.incantation = [];
+            this.commands = [];
         }
     }
 
@@ -89,12 +87,12 @@ export default class Caster {
 
     private fullMatch() {
         const match = this.command;
-        this.spellsMatch = this.spells?.filter((spell) => spell.name === match);
-        this.targetsMatch = this.targets?.filter((target) => target.name === match);
+        this.spellsMatch = this.spells?.filter((s) => s.name === match);
+        this.targetsMatch = this.targets?.filter((t) => t.name === match);
         return this.spellsMatch?.length > 0 || this.targetsMatch?.length > 0;
     }
 
     getCastText() {
-        return this.incantation.map(i => i.name).join(" ") + " " + this.command;
+        return this.commands.map(i => i.name).join(" ") + " " + this.command;
     }
 }

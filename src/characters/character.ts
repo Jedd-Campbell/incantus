@@ -43,11 +43,11 @@ export default class Character {
         let health = character.add([
             k.text(this.stats.health + "/" + this.base.health, { size: 24 }),
             k.color(255, 255, 255),
-            k.pos(character.width / 2, character.height / 2 - 10),
+            k.pos(0, character.height / 2 + 30),
             k.anchor("center"),
         ]);
         health.onUpdate(() => {
-            health.text = this.stats.health + "/" + this.base.health
+            health.text = character.stats.health + "/" + character.base.health
         });
 
         // Todo: Death

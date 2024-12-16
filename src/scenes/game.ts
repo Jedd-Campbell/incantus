@@ -66,6 +66,7 @@ k.scene("game", () => {
         b.destroy();
 
         a.stats.health = Math.max(0, a.stats.health - 10);
+        console.log(a)
     })
 
     k.onUpdate("projectile", (a) => {

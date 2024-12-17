@@ -1,5 +1,5 @@
-import { GameObj } from "kaboom";
-import k from "../kaboom";
+import { GameObj } from "kaplay";
+import k from "../kaplay";
 import Stats from "./stats";
 import SpellEffect from "../spells/spell-effect";
 

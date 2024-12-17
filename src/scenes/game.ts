@@ -1,4 +1,4 @@
-import k from "../kaboom";
+import k from "../kaplay";
 import Incantation from "../spells/incantation";
 import Player from "../characters/player";
 import Enemy from "../characters/enemy";

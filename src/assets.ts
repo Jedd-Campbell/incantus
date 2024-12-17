@@ -1,4 +1,4 @@
-import k from "./kaboom";
+import k from "./kaplay";
 
 k.loadSprite("blue", "sprites/blue.png");
 k.loadSprite("red", "sprites/red.png");

@@ -1,4 +1,4 @@
-import k from "../kaboom";
+import k from "../kaplay";
 import Character from "./character";
 import Stats from "./stats";
 

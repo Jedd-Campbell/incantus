@@ -1,4 +1,4 @@
-import k from "./kaboom";
+import k from "./kaplay";
 import "./assets";
 import "./scenes/menu";
 import "./scenes/game";

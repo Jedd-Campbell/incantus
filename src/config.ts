@@ -1,4 +1,4 @@
 const config = {
-    background: [0, 0, 0],
+    background: '#000000',
 };
 export { config };

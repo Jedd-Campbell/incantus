@@ -1,6 +1,6 @@
-import { Key } from "kaboom";
 import Spell from "./spell";
 import Character from "../characters/character";
+import { Key } from "kaplay";
 
 export default class Incantation {
     resolved: boolean = false;

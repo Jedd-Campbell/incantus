@@ -1,8 +1,8 @@
-import Character from "../characters/character";
+import SpellEffect from "./spell-effect";
 import { SpellType } from "./spell-type";
 
 export default interface Spell {
     name: string;
     type: SpellType;
-    effect(player: Character, target: Character);
+    modifySpellEffect(effect: SpellEffect);
 }

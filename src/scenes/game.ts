@@ -13,8 +13,8 @@ k.scene("game", () => {
 
     const projectileSpeed = 1000;
 
-    const player = new Player("auto", new Stats());
-    const enemy = new Enemy("minion", new Stats());
+    const player = new Player("auto", new Stats(), new Stats());
+    const enemy = new Enemy("minion", new Stats(), new Stats());
     const targets = [player, enemy];
     const spells = [
         new Ignis(),
@@ -64,9 +64,7 @@ k.scene("game", () => {
     k.onCollide("enemy", "projectile", (a, b) => {
         b.hit = true;
         b.destroy();
-
         a.stats.health = Math.max(0, a.stats.health - 10);
-        console.log(a)
     })
 
     k.onUpdate("projectile", (a) => {
@@ -74,12 +72,19 @@ k.scene("game", () => {
     });
 
     function castSpell(utterances: (Spell | Character)[]) {
-        
+
         console.log(utterances);
 
-        let spellEffect = new SpellEffect();
-        spellEffect.caster = player;
-        spellEffect.target = enemy;
+        // todo: create spell effect
+
+        let spellEffect = new SpellEffect(player);
+        utterances.forEach(utterance => {
+            if (utterance instanceof Character) {
+                spellEffect.target = enemy;
+            } else if (utterance.modifySpellEffect) {
+                utterance.modifySpellEffect(spellEffect);
+            }
+        });
         spellEffect.applySpellEffect();
 
 

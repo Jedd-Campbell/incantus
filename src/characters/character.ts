@@ -12,10 +12,10 @@ export default class Character {
 
     effects: SpellEffect[] = [];
 
-    constructor(name: string, stats: Stats, tag: string, sprite: string, x: number, y: number) {
+    constructor(name: string, stats: Stats, base: Stats, tag: string, sprite: string, x: number, y: number) {
         this.name = name;
         this.stats = stats;
-        this.base = stats;
+        this.base = base;
         this.gameObject = this.createGameObject(tag, sprite, x, y);
     }
 

@@ -2,18 +2,18 @@ import Spell from "./spell";
 import SpellEffect from "./spell-effect";
 import { SpellType } from "./spell-type";
 
-export default class Ignis implements Spell {
+export default class Impetus implements Spell {
 
     constructor() {
-        this.name = "ignis";
-        this.type = SpellType.Root;
+        this.name = "impetus";
+        this.type = SpellType.Intent;
     }
 
     name: string;
     type: SpellType;
 
     modifySpellEffect(effect: SpellEffect) {
-        effect.root = this;
+        effect.intent = this;
     }
 
 }

@@ -1,26 +1,24 @@
 import k from "../kaboom";
 import { GameObj } from "kaboom";
 import Character from "../characters/character";
-import { SpellType } from "./spell-type";
-import { SpellBehavior } from "./spell-behaviour";
+import Spell from "./spell";
 
 export default class SpellEffect {
 
-    damage: number;
-    healing: number;
-
-    spellType: SpellType;
-    spellBehavior: SpellBehavior;
-
-    ticks: number = 6;
+    spellObject: GameObj;
 
     caster: Character;
     target: Character;
 
-    gameObject: GameObj;
+    root: Spell;
+    intent: Spell;
 
-    constructor() {
+    damage: number;
+    healing: number;
+    ticks: number = 6;
 
+    constructor(caster: Character) {
+        this.caster = caster;
     }
 
     applySpellEffect() {
@@ -34,8 +32,8 @@ export default class SpellEffect {
     }
 
     private createSpellVisual() {
-        if (!this.gameObject) {
-            this.createProjectile("fire");
+        if (!this.spellObject) {
+            this.createProjectile("attack");
         }
     }
 
@@ -53,7 +51,7 @@ export default class SpellEffect {
             "projectile",
             { dir: d, hit: false },
         ]);
-        k.wait(3, () => {
+        k.wait(5, () => {
             if (projectile) {
                 projectile.destroy();
             }
@@ -72,8 +70,8 @@ export default class SpellEffect {
                 this.target.effects.splice(targetIndex, 1);
             }
 
-            if (this.gameObject) {
-                this.gameObject.destroy();
+            if (this.spellObject) {
+                this.spellObject.destroy();
             }
         }
     }

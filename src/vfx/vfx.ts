@@ -7,22 +7,19 @@ export default class VFX {
 
     }
 
-    public static createProjectile(pointA: Vec2, pointB: Vec2, sprite: SpriteComp, shader: ShaderComp, ttl: number) {
-        const d = pointB.sub(pointA).unit();
-        const a = pointB.angle(pointA);
-
-        console.log(pointA);
-        console.log(pointB);
+    public static createProjectile(castPoint: Vec2, target: Vec2, sprite: SpriteComp, shader: ShaderComp, ttl: number) {
+        const d = target.sub(castPoint).unit();
+        const a = target.angle(castPoint);
 
         let projectile = k.add([
             sprite,
             shader,
             k.z(110),
-            k.pos(pointA.x, pointA.y),
+            k.pos(castPoint.x, castPoint.y),
             k.rotate(a),
             k.anchor("center"),
             k.body(),
-            k.area(),
+            k.area({collisionIgnore: ["projectile"]}),
             "projectile",
             { dir: d, hit: false },
         ]);

@@ -58,9 +58,7 @@ export default class Incantation {
 
     private resolveCast(key: Key, castSpell: (utterances: (Spell | Character)[]) => any) {
         if (key === "enter") {
-            // todo: Resolve cast  
             if(castSpell) {
-                let effect = true; // todo: build effect from incantation
                 castSpell(this.utterances);
             }
 
@@ -80,15 +78,15 @@ export default class Incantation {
         }
 
         const match = this.command + key;
-        const isSpellMatch = this.spells?.some((s) => s.name.slice(0, match.length) === match);
-        const isTargetMatch = this.targets?.some((t) => t.name.slice(0, match.length) === match);
+        const isSpellMatch = this.spells?.some((s) => s.name?.toLowerCase().slice(0, match.length) === match);
+        const isTargetMatch = this.targets?.some((t) => t.name?.toLowerCase().slice(0, match.length) === match);
         return isSpellMatch || isTargetMatch;
     }
 
     private fullMatch() {
         const match = this.command;
-        this.spellsMatch = this.spells?.filter((s) => s.name === match);
-        this.targetsMatch = this.targets?.filter((t) => t.name === match);
+        this.spellsMatch = this.spells?.filter((s) => s.name?.toLowerCase() === match);
+        this.targetsMatch = this.targets?.filter((t) => t.name?.toLowerCase() === match);
         return this.spellsMatch?.length > 0 || this.targetsMatch?.length > 0;
     }
 

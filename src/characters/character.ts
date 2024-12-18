@@ -36,30 +36,74 @@ export default class Character {
             tag,
             this.name,
             {
+                castText: "",
+                castPercentage: 0,
                 stats: this.stats,
                 base: this.base
             }
         ]);
 
-        // Health Bar
-        let health = character.add([
-            k.text(this.stats.health + "/" + this.base.health, { size: 24 }),
-            k.color(255, 255, 255),
+        // Cast Bar
+        const castBarWidth = 75;
+        let castBar = character.add([
+            k.rect(castBarWidth, 5),
+            k.color(36, 20, 61),
             k.z(103),
             k.pos(0, character.height / 2 + 30),
             k.anchor("center"),
         ]);
-        health.onUpdate(() => {
-            health.text = character.stats.health + "/" + character.base.health
+        let castPercentage = castBar.add([
+            k.rect(0, 5),
+            k.color(253, 132, 0),
+            k.z(104),
+            k.pos(0, 0),
+            k.anchor("center"),
+        ]);
+        castPercentage.onUpdate(() => {
+            castPercentage.width = character.castPercentage * castBarWidth;
         });
 
-        const pedestal = k.add([
-            k.sprite("pedestal"),
-            k.scale(6),
-            k.pos(x, y + 210),
+        let castText = character.add([
+            k.text(character.castText, { size: 14 }),
+            k.color(253, 132, 0),
+            k.z(105),
+            k.pos(0, -character.height),
             k.anchor("center"),
-            k.z(99),
-        ])
+        ]);
+        castText.onUpdate(() => {
+            castText.text = character.castText.toLowerCase();
+        });
+
+        // Health Bar
+        const healthBarWidth = 75;
+        let healthMax = character.add([
+            k.rect(healthBarWidth, 5),
+            k.color(255, 0, 0),
+            k.z(103),
+            k.pos(healthBarWidth * -0.5, character.height / 2 + 20),
+            k.anchor("topleft"),
+        ]);
+        let health = healthMax.add([
+            k.rect(healthBarWidth, 5),
+            k.color(0, 255, 0),
+            k.z(103),
+            k.pos(0, 0),
+            k.anchor("topleft"),
+        ]);
+        health.onUpdate(() => {
+            const percentage = (character.stats.health / character.base.health);
+            health.width = Math.max(percentage * healthBarWidth, 0);
+        });
+
+        // Name Plate
+        let namePlate = character.add([
+            k.text(this.name, { size: 14 }),
+            k.color(255, 255, 255),
+            k.z(103),
+            k.pos(0, character.height / 2 + 10),
+            k.anchor("center"),
+        ]);
+
 
         // Todo: Death
         // Todo: Animations (Cast, Hit, Death, Spawn?, Victory?)

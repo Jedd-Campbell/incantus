@@ -10,13 +10,17 @@ import Aquae from "../spells/aquae";
 import SpellEffect from "../spells/spell-effect";
 import Impetus from "../spells/impetus";
 import Impedio from "../spells/impedio";
+import Utils from "../utils";
 
 k.scene("game", () => {
     // k.debug.inspect = true;
-    const projectileSpeed = 2000;
+    const projectileSpeed = 1500;
 
-    const player = new Player("auto", new Stats(), new Stats());
-    const enemy = new Enemy("minion", new Stats(), new Stats());
+    const names = ["Hazelix", "Odelius", "Thigron", "Exon", "Stora", "Seldrest"];
+    const nameIndex = Utils.randomInteger(0, names.length - 1);
+
+    const player = new Player(names[nameIndex], new Stats(), new Stats());
+    const enemy = new Enemy("Minion", new Stats(), new Stats());
     const targets = [player, enemy];
     const spells = [
         // intents
@@ -30,6 +34,8 @@ k.scene("game", () => {
 
     let caster = new Incantation(spells, targets);
 
+    enemy.castSpell(player);
+
     // Controls
     k.onKeyPress((key) => {
         caster.parse(key, castSpell);
@@ -39,27 +45,8 @@ k.scene("game", () => {
         k.go("menu");
     });
 
-    // UI
-    k.add([
-        k.rect(k.width() - 10, 50),
-        k.color(0, 0, 0),
-        k.pos(5, k.height() - 5),
-        k.anchor("botleft"),
-        k.z(100),
-        k.fixed(),
-        k.opacity(0.3),
-    ]);
-
-    let spellText = k.add([
-        k.text("Spell System Test", { size: 24 }),
-        k.color(255, 255, 255),
-        k.pos(30, k.height() - 30),
-        k.z(101),
-        k.anchor("left"),
-    ]);
-
-    spellText.onUpdate(() => {
-        spellText.text = caster.getIncantationText()
+    k.onUpdate(() => {
+        player.gameObject.castText = caster.getIncantationText()
     });
 
     // Game logic
@@ -79,13 +66,7 @@ k.scene("game", () => {
     });
 
     function castSpell(utterances: (Spell | Character)[]) {
-
-        console.log(utterances);
-
-        // todo: create spell effect
-
         let spellEffect = new SpellEffect(player);
         spellEffect.parseUtterances(utterances);
-
     }
 })

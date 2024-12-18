@@ -18,7 +18,7 @@ export default class SpellEffect {
 
     damage: number;
     healing: number;
-    ticks: number = 6;
+    ticks: number = 10;
 
     constructor(caster: Character) {
         this.caster = caster;
@@ -57,8 +57,10 @@ export default class SpellEffect {
         if (this.spellObject) return;
 
         if (this.intent instanceof Impetus) {
+            const leftSide = this.caster.gameObject.pos.x < k.width() / 2;
+            const offSet = leftSide ? 100 : -100;
             VFX.createProjectile(
-                k.vec2(this.caster.gameObject.pos.x + 100, this.caster.gameObject.pos.y - 100),
+                k.vec2(this.caster.gameObject.pos.x + offSet, this.caster.gameObject.pos.y - 100),
                 this.target.gameObject.pos,
                 this.intent.sprite(),
                 this.root.shader(),
@@ -77,21 +79,21 @@ export default class SpellEffect {
 
     }
 
-    private destroySpell() {
-        if (this.ticks === 0) {
-            const casterIndex = this.caster.effects.indexOf(this);
-            if (casterIndex > -1) {
-                this.caster.effects.splice(casterIndex, 1);
-            }
+    // private destroySpell() {
+    //     if (this.ticks === 0) {
+    //         const casterIndex = this.caster.effects.indexOf(this);
+    //         if (casterIndex > -1) {
+    //             this.caster.effects.splice(casterIndex, 1);
+    //         }
 
-            const targetIndex = this.target.effects.indexOf(this);
-            if (targetIndex > -1) {
-                this.target.effects.splice(targetIndex, 1);
-            }
+    //         const targetIndex = this.target.effects.indexOf(this);
+    //         if (targetIndex > -1) {
+    //             this.target.effects.splice(targetIndex, 1);
+    //         }
 
-            if (this.spellObject) {
-                this.spellObject.destroy();
-            }
-        }
-    }
+    //         if (this.spellObject) {
+    //             this.spellObject.destroy();
+    //         }
+    //     }
+    // }
 }

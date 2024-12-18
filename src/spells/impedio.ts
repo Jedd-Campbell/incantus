@@ -3,27 +3,25 @@ import Spell from "./spell";
 import SpellEffect from "./spell-effect";
 import { SpellType } from "./spell-type";
 
-export default class Aquae implements Spell {
+export default class Impedio implements Spell {
 
     constructor() {
-        this.name = "aquae";
-        this.type = SpellType.Root;
+        this.name = "impedio";
+        this.type = SpellType.Intent;
     }
 
     name: string;
     type: SpellType;
 
     modifySpellEffect(effect: SpellEffect) {
-        effect.root = this;
+        effect.intent = this;
     }
 
     shader() {
-        return k.shader(this.name, () => ({
-            u_time: k.time(),
-        }));
+        return null;
     }
 
     sprite() {
-        return k.sprite("default");
+        return k.sprite(this.name);
     }
 }

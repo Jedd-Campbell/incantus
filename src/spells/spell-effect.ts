@@ -2,6 +2,9 @@ import k from "../kaplay";
 import { GameObj } from "kaplay";
 import Character from "../characters/character";
 import Spell from "./spell";
+import Impetus from "./impetus";
+import Impedio from "./impedio";
+import VFX from "../vfx/vfx";
 
 export default class SpellEffect {
 
@@ -21,41 +24,57 @@ export default class SpellEffect {
         this.caster = caster;
     }
 
-    applySpellEffect() {
-        if (this.ticks > 0) {
-            // todo
-            this.createSpellVisual();
+    parseUtterances(utterances: (Character | Spell)[]) {
+        utterances.forEach(utterance => {
+            if (utterance instanceof Character) {
+                this.target = utterance;
+            } else if (utterance.modifySpellEffect) {
+                utterance.modifySpellEffect(this);
+            }
+        });
+        this.applySpellEffect();
+    }
 
-            this.ticks--;
-            this.destroySpell();
+    applySpellEffect() {
+        if (this.fizzle()) {
+            return;
         }
+
+        // todo
+        this.createSpellVisual();
+
+    }
+
+    private fizzle() {
+        if (!this.target || !this.intent || !this.root) {
+            // todo: create fizzle effect
+            return true;
+        }
+        return false;
     }
 
     private createSpellVisual() {
-        if (!this.spellObject) {
-            this.createProjectile("attack");
+        if (this.spellObject) return;
+
+        if (this.intent instanceof Impetus) {
+            VFX.createProjectile(
+                k.vec2(this.caster.gameObject.pos.x + 100, this.caster.gameObject.pos.y - 100),
+                this.target.gameObject.pos,
+                this.intent.sprite(),
+                this.root.shader(),
+                10 // max projectile lifetime
+            );
         }
-    }
 
-    private createProjectile(sprite: string) {
-        const d = this.target.gameObject.pos.sub(this.caster.gameObject.pos).unit();
-        const a = this.target.gameObject.pos.angle(this.target.gameObject.pos);
+        if (this.intent instanceof Impedio) {
+            VFX.createShield(
+                this.target.gameObject.pos,
+                this.intent.sprite(),
+                this.root.shader(),
+                this.ticks
+            );
+        }
 
-        let projectile = k.add([
-            k.pos(this.caster.gameObject.pos.x + 100, this.caster.gameObject.pos.y - 100),
-            k.rotate(a),
-            k.sprite(sprite),
-            k.anchor("center"),
-            k.body(),
-            k.area(),
-            "projectile",
-            { dir: d, hit: false },
-        ]);
-        k.wait(5, () => {
-            if (projectile) {
-                projectile.destroy();
-            }
-        });
     }
 
     private destroySpell() {

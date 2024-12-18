@@ -8,15 +8,22 @@ import Spell from "../spells/spell";
 import Ignis from "../spells/ignis";
 import Aquae from "../spells/aquae";
 import SpellEffect from "../spells/spell-effect";
+import Impetus from "../spells/impetus";
+import Impedio from "../spells/impedio";
 
 k.scene("game", () => {
-
-    const projectileSpeed = 1000;
+    // k.debug.inspect = true;
+    const projectileSpeed = 2000;
 
     const player = new Player("auto", new Stats(), new Stats());
     const enemy = new Enemy("minion", new Stats(), new Stats());
     const targets = [player, enemy];
     const spells = [
+        // intents
+        new Impetus(),
+        new Impedio(),
+
+        // roots
         new Ignis(),
         new Aquae(),
     ];
@@ -61,7 +68,7 @@ k.scene("game", () => {
         targets.forEach((t) => t.applySpellEffects())
     });
 
-    k.onCollide("enemy", "projectile", (a, b) => {
+    k.onCollide("character", "projectile", (a, b) => {
         b.hit = true;
         b.destroy();
         a.stats.health = Math.max(0, a.stats.health - 10);
@@ -78,16 +85,7 @@ k.scene("game", () => {
         // todo: create spell effect
 
         let spellEffect = new SpellEffect(player);
-        utterances.forEach(utterance => {
-            if (utterance instanceof Character) {
-                spellEffect.target = enemy;
-            } else if (utterance.modifySpellEffect) {
-                utterance.modifySpellEffect(spellEffect);
-            }
-        });
-        spellEffect.applySpellEffect();
-
-
+        spellEffect.parseUtterances(utterances);
 
     }
 })

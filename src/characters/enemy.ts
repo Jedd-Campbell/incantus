@@ -5,6 +5,6 @@ import Stats from "./stats";
 export default class Enemy extends Character {
     
     constructor(name: string, stats: Stats, base: Stats) {
-        super(name, stats, base, "enemy", "red", k.width() - 200, 200);
+        super(name, stats, base, "enemy", "red", k.width() - 250, 250);
     }
 }

@@ -27,10 +27,12 @@ export default class Character {
         const character = k.add([
             k.sprite(sprite),
             k.z(100),
+            k.scale(2),
             k.pos(x, y),
             k.area(),
-            k.body(),
+            k.body({ isStatic: true }),
             k.anchor("center"),
+            "character",
             tag,
             this.name,
             {
@@ -43,12 +45,21 @@ export default class Character {
         let health = character.add([
             k.text(this.stats.health + "/" + this.base.health, { size: 24 }),
             k.color(255, 255, 255),
+            k.z(103),
             k.pos(0, character.height / 2 + 30),
             k.anchor("center"),
         ]);
         health.onUpdate(() => {
             health.text = character.stats.health + "/" + character.base.health
         });
+
+        const pedestal = k.add([
+            k.sprite("pedestal"),
+            k.scale(6),
+            k.pos(x, y + 210),
+            k.anchor("center"),
+            k.z(99),
+        ])
 
         // Todo: Death
         // Todo: Animations (Cast, Hit, Death, Spawn?, Victory?)

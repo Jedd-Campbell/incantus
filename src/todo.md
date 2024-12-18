@@ -3,7 +3,7 @@
 [x] Add first basic enemy on screen
 [x] Add health bars
 [x] Add first basic back-and-forth spell interaction
-[ ] Victory and Defeat
+[x] Victory and Defeat
 [ ] Flesh out spell library and interactions
 [ ] Add basic spell effect visuals
 [ ] Add basic level/progression system

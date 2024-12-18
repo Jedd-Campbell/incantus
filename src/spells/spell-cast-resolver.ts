@@ -1,12 +1,14 @@
 import Spell from "./spell";
 import Character from "../characters/character";
 import { Key } from "kaplay";
+import SpellEffect from "./spell-effect";
 
-export default class Incantation {
+export default class SpellCastResolver {
     resolved: boolean = false;
     keys: string[] = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m", "enter", "space"];
     previousKey: string = "";
 
+    caster: Character;
     targets: Character[] = [];
     spells: Spell[] = [];
 
@@ -16,17 +18,23 @@ export default class Incantation {
     utterances: (Spell | Character)[] = [];
     command: string = "";
 
-    constructor(spells: Spell[], targets: Character[]) {
+    constructor(caster: Character, spells: Spell[], targets: Character[]) {
+        this.caster = caster;
         this.spells = spells;
         this.targets = targets;
     }
 
-    parse(key: Key, castSpell) {
+    parse(key: Key) {
+        if (this.caster.dead) {
+            return;
+        }
+        
         if (this.keys.includes(key.toString())) {
             this.processCast(key);
-            this.resolveCast(key, castSpell);
+            this.resolveCast(key);
             this.previousKey = key;
             this.resolved = false;
+            this.setCastText();
         }
     }
 
@@ -56,11 +64,10 @@ export default class Incantation {
         }
     }
 
-    private resolveCast(key: Key, castSpell: (utterances: (Spell | Character)[]) => any) {
+    private resolveCast(key: Key) {
         if (key === "enter") {
-            if(castSpell) {
-                castSpell(this.utterances);
-            }
+            let spellEffect = new SpellEffect(this.caster);
+            spellEffect.parseUtterances(this.utterances);
 
             // Reset caster
             this.resolved = true;
@@ -90,7 +97,7 @@ export default class Incantation {
         return this.spellsMatch?.length > 0 || this.targetsMatch?.length > 0;
     }
 
-    getIncantationText() {
-        return this.utterances.map(i => i.name).join(" ") + " " + this.command;
+    setCastText() {
+        this.caster.gameObject.castText = this.utterances.map(i => i.name).join(" ") + " " + this.command;
     }
 }

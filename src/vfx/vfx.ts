@@ -7,7 +7,7 @@ export default class VFX {
 
     }
 
-    public static createProjectile(castPoint: Vec2, target: Vec2, sprite: SpriteComp, shader: ShaderComp, ttl: number) {
+    public static createProjectile(castPoint: Vec2, target: Vec2, sprite: SpriteComp, shader: ShaderComp, ttl: number, speed: number) {
         const d = target.sub(castPoint).unit();
         const a = target.angle(castPoint);
 
@@ -23,6 +23,9 @@ export default class VFX {
             "projectile",
             { dir: d, hit: false },
         ]);
+        projectile.onUpdate(() => {
+            projectile.move(projectile.dir.scale(speed));
+        });
         k.wait(ttl, () => {
             if (projectile) {
                 projectile.destroy();

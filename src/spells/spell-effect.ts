@@ -57,14 +57,13 @@ export default class SpellEffect {
         if (this.spellObject) return;
 
         if (this.intent instanceof Impetus) {
-            const leftSide = this.caster.gameObject.pos.x < k.width() / 2;
-            const offSet = leftSide ? 100 : -100;
             VFX.createProjectile(
-                k.vec2(this.caster.gameObject.pos.x + offSet, this.caster.gameObject.pos.y - 100),
+                this.caster.gameObject.castPoint,
                 this.target.gameObject.pos,
                 this.intent.sprite(),
                 this.root.shader(),
-                10 // max projectile lifetime
+                10, // max projectile lifetime
+                1500, // projectile speed
             );
         }
 

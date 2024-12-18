@@ -28,7 +28,7 @@ export default class Stats {
     private healthMax: number = 1000;
 
     constructor() {
-        this._health = 100;
+        this._health = 30;
     }
 
     public get health() { return Utils.clamp(this._health, this.healthMin, this.healthMax); }

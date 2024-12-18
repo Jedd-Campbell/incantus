@@ -1,18 +1,15 @@
 import k from "../kaplay";
-import Incantation from "../spells/incantation";
+import SpellCastResolver from "../spells/spell-cast-resolver";
 import Player from "../characters/player";
 import Enemy from "../characters/enemy";
-import Character from "../characters/character";
 import Stats from "../characters/stats";
-import Spell from "../spells/spell";
 import Ignis from "../spells/ignis";
 import Aquae from "../spells/aquae";
-import SpellEffect from "../spells/spell-effect";
 import Impetus from "../spells/impetus";
 import Impedio from "../spells/impedio";
 import Utils from "../utils";
 
-k.scene("game", () => {
+k.scene("game", (args) => {
     // k.debug.inspect = true;
     const projectileSpeed = 1500;
 
@@ -32,27 +29,27 @@ k.scene("game", () => {
         new Aquae(),
     ];
 
-    let caster = new Incantation(spells, targets);
+    let incantation = new SpellCastResolver(player, spells, targets);
 
-    enemy.castSpell(player);
+    enemy.startSpellCasting(player);
 
     // Controls
     k.onKeyPress((key) => {
-        caster.parse(key, castSpell);
+        incantation.parse(key);
     });
-
     k.onKeyPress("escape", () => {
-        k.go("menu");
-    });
-
-    k.onUpdate(() => {
-        player.gameObject.castText = caster.getIncantationText()
+        // k.go("menu");
+        k.go("defeat", { enemy });
     });
 
     // Game logic
-
-    k.loop(1, () => {
-        targets.forEach((t) => t.applySpellEffects())
+    k.onUpdate(() => {
+        if (player.stats.health <= 0) {
+            k.go("defeat", { enemy });
+        }
+        if (enemy.stats.health <= 0) {
+            k.go("victory", { enemy, level: args.level });
+        }
     });
 
     k.onCollide("character", "projectile", (a, b) => {
@@ -60,13 +57,4 @@ k.scene("game", () => {
         b.destroy();
         a.stats.health = Math.max(0, a.stats.health - 10);
     })
-
-    k.onUpdate("projectile", (a) => {
-        a.move(a.dir.scale(projectileSpeed));
-    });
-
-    function castSpell(utterances: (Spell | Character)[]) {
-        let spellEffect = new SpellEffect(player);
-        spellEffect.parseUtterances(utterances);
-    }
 })

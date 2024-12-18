@@ -1,4 +1,4 @@
-import { GameObj } from "kaplay";
+import { GameObj, Vec2 } from "kaplay";
 import k from "../kaplay";
 import Stats from "./stats";
 import SpellEffect from "../spells/spell-effect";
@@ -9,26 +9,29 @@ export default class Character {
     stats: Stats;
     base: Stats;
     gameObject: GameObj;
+    sprite: string;
+    dead: boolean = false;
 
     effects: SpellEffect[] = [];
 
-    constructor(name: string, stats: Stats, base: Stats, tag: string, sprite: string, x: number, y: number) {
+    constructor(name: string, stats: Stats, base: Stats, tag: string, sprite: string, startPosition: Vec2, castPoint: Vec2) {
         this.name = name;
         this.stats = stats;
         this.base = base;
-        this.gameObject = this.createGameObject(tag, sprite, x, y);
+        this.sprite = sprite;
+        this.gameObject = this.createGameObject(tag, sprite, startPosition, castPoint);
     }
 
     applySpellEffects() {
         this.effects?.forEach(e => e.applySpellEffect());
     }
 
-    createGameObject(tag: string, sprite: string, x: number, y: number) {
+    createGameObject(tag: string, sprite: string, startPosition: Vec2, castPoint: Vec2) {
         const character = k.add([
             k.sprite(sprite),
             k.z(100),
             k.scale(2),
-            k.pos(x, y),
+            k.pos(startPosition),
             k.area(),
             k.body({ isStatic: true }),
             k.anchor("center"),
@@ -38,6 +41,7 @@ export default class Character {
             {
                 castText: "",
                 castPercentage: 0,
+                castPoint,
                 stats: this.stats,
                 base: this.base
             }
@@ -96,7 +100,7 @@ export default class Character {
         });
 
         // Name Plate
-        let namePlate = character.add([
+        character.add([
             k.text(this.name, { size: 14 }),
             k.color(255, 255, 255),
             k.z(103),
@@ -104,8 +108,12 @@ export default class Character {
             k.anchor("center"),
         ]);
 
-
         // Todo: Death
+        character.onUpdate(() => {
+            if (character.stats.health <= 0) {
+                this.dead = true;
+            }
+        });
         // Todo: Animations (Cast, Hit, Death, Spawn?, Victory?)
 
         return character;

@@ -1,8 +1,8 @@
 import k from "./kaplay";
 
 // characters
-k.loadSprite("blue", "sprites/blue.png");
-k.loadSprite("red", "sprites/red.png");
+k.loadSprite("blue", "sprites/wizard.png");
+k.loadSprite("red", "sprites/dummy.png");
 
 // ui
 k.loadSprite("title", "sprites/title.png");

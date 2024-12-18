@@ -13,11 +13,11 @@ k.scene("game", (args) => {
     // k.debug.inspect = true;
     const projectileSpeed = 1500;
 
-    const names = ["Hazelix", "Odelius", "Thigron", "Exon", "Stora", "Seldrest"];
+    const names = ["Eric", "Admus", "Narkin", "Hazelix", "Seldrest", "Moradeane"];
     const nameIndex = Utils.randomInteger(0, names.length - 1);
 
     const player = new Player(names[nameIndex], new Stats(), new Stats());
-    const enemy = new Enemy("Minion", new Stats(), new Stats());
+    const enemy = new Enemy("Dummy", new Stats(), new Stats());
     const targets = [player, enemy];
     const spells = [
         // intents
@@ -31,15 +31,14 @@ k.scene("game", (args) => {
 
     let incantation = new SpellCastResolver(player, spells, targets);
 
-    enemy.startSpellCasting(player);
+    // enemy.startSpellCasting(player);
 
     // Controls
     k.onKeyPress((key) => {
         incantation.parse(key);
     });
     k.onKeyPress("escape", () => {
-        // k.go("menu");
-        k.go("defeat", { enemy });
+        k.go("menu");
     });
 
     // Game logic

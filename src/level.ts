@@ -38,18 +38,19 @@ export default class Level {
 
         // todo: buff stats
         switch (level) {
-            case 0: return new Enemy("Dummy", new Stats(6), "dummy");
-            case 1: return new Enemy("Dummy", new Stats(10), "dummy");
-            case 3: return new Enemy("Dummy", new Stats(15), "dummy");
-            case 4: return new Enemy("Zog", new Stats(50), "shaman");
-            case 5: return new Enemy("Gorbag", new Stats(60), "shaman");
+            case 0: return new Enemy("Dummy", new Stats(4), "dummy");
+            case 1: return new Enemy("Strawman", new Stats(10), "dummy");
+            case 2: return new Enemy("Scarecrow", new Stats(15), "dummy");
+            case 3: return new Enemy("ZugZug", new Stats(50), "shaman");
+            case 4: return new Enemy("Gorbag", new Stats(60), "shaman");
             default: return Level.randomizedEnemy(level);
         }
     }
 
 
     private static randomizedEnemy(level: number) {
-        return new Enemy("Dummy", new Stats(), "shaman");
+        const hp = 50 + (level * 5);
+        return new Enemy("Dummy", new Stats(hp), "shaman");
     }
 
     private static getPlayerSpells(level: number) {

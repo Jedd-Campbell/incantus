@@ -22,13 +22,11 @@ export default class Enemy extends Character {
         const spellChoice = Utils.randomInteger(0, spellSequences.length - 1);
         const sequence = spellSequences[spellChoice];
 
-        // Update cast text every second
+        // Update cast bar every second
         const fps = 10;
         const frameTime = 1 / fps;
         const castTime = Utils.randomInteger(10, 20);
         let timeLeft = castTime * fps;
-
-        // Show cast bar
         k.loop(frameTime, () => {
             const percentage = Math.max(1 - ((timeLeft / (castTime * fps))), 0);
             this.gameObject.castPercentage = percentage;

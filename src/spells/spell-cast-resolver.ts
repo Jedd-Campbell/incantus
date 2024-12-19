@@ -4,7 +4,7 @@ import { Key } from "kaplay";
 import SpellEffect from "./spell-effect";
 
 export default class SpellCastResolver {
-    resolved: boolean = false;
+    // resolved: boolean = false;
     keys: string[] = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m", "enter", "space"];
     previousKey: string = "";
 
@@ -31,13 +31,13 @@ export default class SpellCastResolver {
             this.processCast(key);
             this.resolveCast(key);
             this.previousKey = key;
-            this.resolved = false;
+            // this.resolved = false;
             this.setCastText();
         }
     }
 
     private processCast(key: Key) {
-        if (!this.resolved) {
+        // if (!this.resolved) {
 
             // todo: tally up errors and modify incantation based on errors
             // todo: consider incantation fizzle after 5 errors
@@ -59,7 +59,7 @@ export default class SpellCastResolver {
                 }
                 this.command = "";
             }
-        }
+        // }
     }
 
     private resolveCast(key: Key) {
@@ -68,7 +68,7 @@ export default class SpellCastResolver {
             spellEffect.parseSpellChain(this.chain);
 
             // Reset caster
-            this.resolved = true;
+            // this.resolved = true;
             this.previousKey = "";
             this.command = "";
             this.targetsMatch = this.targets;

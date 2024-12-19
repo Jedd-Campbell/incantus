@@ -26,6 +26,6 @@ k.scene("victory", (args: {level: Level}) => {
     ]);
 
     k.onKeyPress("enter", () => {
-        k.go("game", {level: args.level.level + 1});
+        k.go("game", {level: args.level.level + 1, playerName: args.level.player.name});
     });
 });

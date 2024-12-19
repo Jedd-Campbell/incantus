@@ -1,4 +1,3 @@
-import Character from "../characters/character";
 import k from "../kaplay";
 import Level from "../level";
 
@@ -27,6 +26,6 @@ k.scene("defeat", (args: {level: Level}) => {
 
 
     k.onKeyPress("enter", () => {
-        k.go("game", {level: 0});
+        k.go("game", {level: 1, playerName: args.level.player.name});
     });
 });

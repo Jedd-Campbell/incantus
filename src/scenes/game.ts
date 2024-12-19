@@ -11,8 +11,9 @@ k.scene("game", (args) => {
     // k.debug.inspect = true;
 
 
-    const level = Level.createLevel(args.level);
-    const resolver = new SpellCastResolver(level.player, [level.player, level.enemy]);
+    const level = Level.createLevel(args.level, args.playerName);
+    const targets = [level.player, level.enemy];
+    const resolver = new SpellCastResolver(level.player, targets);
 
     // Controls
     k.onKeyPress((key) => {
@@ -45,7 +46,7 @@ k.scene("game", (args) => {
     k.add([
         k.text("Level " + args.level, { size: 24 }),
         k.color(255, 255, 255),
-        k.pos(50, 50),
+        k.pos(80, 50),
         k.anchor("topleft"),
         k.z(20),
     ]);

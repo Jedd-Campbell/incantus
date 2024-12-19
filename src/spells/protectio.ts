@@ -15,7 +15,7 @@ export default class Protectio extends Spell {
 
     modifySpellEffect(effect: SpellEffect, chain: (Spell | Character)[]) {
         super.modifySpellEffect(effect, chain);
-        effect.ticks += 10;
+        effect.ticks += 20;
         effect.blockAmount += 10;
         effect.maxBlockAmount += 10;
     }
@@ -29,7 +29,7 @@ export default class Protectio extends Spell {
 
         this.spellObject = VFX.createShield(
             effect.target.gameObject.pos,
-            effect.intent?.sprite() ?? this.sprite(),
+            effect.sprite(),
             effect.ticks
         );
 

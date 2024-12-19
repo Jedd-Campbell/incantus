@@ -16,7 +16,7 @@ export default class Impetus extends Spell {
 
     modifySpellEffect(effect: SpellEffect, chain: (Spell | Character)[]) {
         super.modifySpellEffect(effect, chain);
-        effect.damage += 10;
+        effect.damage += 2;
     }
 
     invokeSpellEffect(effect: SpellEffect) {
@@ -30,17 +30,13 @@ export default class Impetus extends Spell {
         this.spellObject = VFX.createProjectile(
             effect.caster.gameObject.castPoint,
             effect.target.gameObject.pos,
-            effect.intent?.sprite() ?? this.sprite(),
-            10, // max projectile lifetime
+            effect.sprite(),
+            9, // max projectile lifetime
             800, // projectile speed
         );
+
         this.spellObject.onCollide("character", (target: GameObj) => {
-            this.spellObject.destroy();
             effect.target.applyDamage(effect);
         });
-    }
-
-    sprite() {
-        return k.sprite(this.name);
     }
 }

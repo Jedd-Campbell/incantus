@@ -8,15 +8,18 @@ export default class Ignis extends Spell {
 
     constructor(hasInverse: boolean = true) {
         const aquae = hasInverse ? new Aquae(false) : null;
-        super("ignis", "fire", SpellType.Root, 2, aquae);
+        super("ignis", "fire", SpellType.Root, 3, aquae);
     }
 
     invokeSpellEffect(effect: SpellEffect) {
+        if (!effect.target) {
+            super.invokeSpellEffect(effect);
+            return;
+        }
+
+        effect.damage += 8;
+
         // todo: fizzle
         // does nothing
-    }
-
-    sprite() {
-        return k.sprite("ignis");
     }
 }

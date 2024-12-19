@@ -38,30 +38,22 @@ export default class VFX {
             k.anchor("center"),
             "shield",
         ]);
-        let ring1 = object.add([
-            sprite,
-            k.z(111),
-            k.rotate(30),
-            k.pos(0,0),
-            k.anchor("center"),
-            "shield",
-        ]);
-        ring1.flipX = true;
         object.onUpdate(() => {
             object.angle += k.dt() * 30;
         });
-        ring1.onUpdate(() => {
-            ring1.angle += k.dt() * -60;
-        });
-        // ring2.onUpdate(() => {
-        //     ring2.angle += k.dt() * 40;
-        // });
         VFX.destroyAfterSomeTime(object, ttl);
         return object;
     }
 
-    public static fizzle(point: Vec2, sprite: SpriteComp, ttl: number) {
-        // todo
+    public static fizzle(point: Vec2) {
+        let fizzle = k.add([
+            k.sprite("fizzle"),
+            k.z(111),
+            k.pos(point),
+            k.anchor("center"),
+            "fizzle",
+        ]);
+        VFX.destroyAfterSomeTime(fizzle, 1);
     }
 
     public static destroyAfterSomeTime(object: GameObj, ttl: number) {

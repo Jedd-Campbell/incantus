@@ -1,5 +1,7 @@
+import { SpriteComp } from "kaplay";
 import Character from "../characters/character";
 import Spell from "./spell";
+import k from "../kaplay";
 
 export default class SpellEffect {
 
@@ -31,11 +33,22 @@ export default class SpellEffect {
         this.invokeSpellEffect();
     }
 
+    sprite(): SpriteComp {
+        let sprite = "fizzle";
+        if (this.intent && this.root) {
+            sprite = this.intent.name + "_" + this.root.name;
+        } else if (this.intent || this.root) {
+            sprite = this.intent?.name ?? this.root.name;
+        }
+
+        return k.sprite(sprite);
+    }
+
     invokeSpellEffect() {
-        if(this.intent) {
+        if (this.intent) {
             this.intent.invokeSpellEffect(this);
         }
-        if(this.root) {
+        if (this.root) {
             this.root.invokeSpellEffect(this);
         }
     }

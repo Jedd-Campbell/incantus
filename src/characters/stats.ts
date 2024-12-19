@@ -8,9 +8,9 @@ export default class Stats {
 
     // Cast times
 
-    constructor() {
-        this.health = 30;
-        this.healthMax = 30;
+    constructor(health: number = 30) {
+        this.health = health;
+        this.healthMax = health;
     }
 
 }

@@ -24,13 +24,13 @@ export default class SpellBook {
         const bookWidth = 240;
         const bookHeight = 176;
         const bookScale = 1;
-        const bookMargin = 20;
+        const bookMargin = 40;
         const bookFontSize = 16;
 
         const book = k.add([
             k.sprite("spellbook"),
             k.z(20),
-            k.pos(k.width() - (bookWidth * bookScale + bookMargin), k.height() - (bookHeight * bookScale + bookMargin)),
+            k.pos(k.width() - (bookWidth * bookScale + (bookMargin * 2)), k.height() - (bookHeight * bookScale + bookMargin)),
             k.scale(bookScale),
         ]);
 

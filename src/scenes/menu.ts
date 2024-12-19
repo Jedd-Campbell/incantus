@@ -20,6 +20,6 @@ k.scene("menu", () => {
 
 
     k.onKeyPress("enter", () => {
-        k.go("game", {level: 2});
+        k.go("game", {level: 0, playerName: null});
     });
 });

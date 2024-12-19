@@ -32,14 +32,6 @@ export default class Spell {
     }
 
     invokeSpellEffect(effect: SpellEffect) {
-        VFX.fizzle(
-            effect.caster.gameObject.pos,
-            this.sprite(),
-            3
-        );
+        VFX.fizzle(effect.caster.gameObject.castPoint);
     }
-
-    sprite(): SpriteComp {
-        return k.sprite("fizzle");
-    };
 }

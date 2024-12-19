@@ -24,10 +24,13 @@ export default class Level {
         this.enemy = enemy;
     }
 
-    private static createPlayer(spells: Spell[]) {
-        const names = ["Eric", "Admus", "Narkin", "Hazelix", "Seldrest", "Moradeane"];
-        const nameIndex = Utils.randomInteger(0, names.length - 1);
-        const player = new Player(names[nameIndex], new Stats(), spells);
+    private static createPlayer(spells: Spell[], name: string) {
+        if (!name) {
+            const names = ["Eric", "Admus", "Narkin", "Hazelix", "Seldrest", "Moradeane"];
+            const nameIndex = Utils.randomInteger(0, names.length - 1);
+            name = names[nameIndex];
+        }
+        const player = new Player(name, new Stats(), spells);
         return player;
     }
 
@@ -35,16 +38,18 @@ export default class Level {
 
         // todo: buff stats
         switch (level) {
-            case 0: return new Enemy("Dummy", new Stats(), "dummy");
-            case 1: return new Enemy("Dummy", new Stats(), "dummy");
-            case 2: return new Enemy("Zog", new Stats(), "shaman");
+            case 0: return new Enemy("Dummy", new Stats(6), "dummy");
+            case 1: return new Enemy("Dummy", new Stats(10), "dummy");
+            case 3: return new Enemy("Dummy", new Stats(15), "dummy");
+            case 4: return new Enemy("Zog", new Stats(50), "shaman");
+            case 5: return new Enemy("Gorbag", new Stats(60), "shaman");
             default: return Level.randomizedEnemy(level);
         }
     }
 
-    
+
     private static randomizedEnemy(level: number) {
-        return new Enemy("Dummy", new Stats(), "dummy");
+        return new Enemy("Dummy", new Stats(), "shaman");
     }
 
     private static getPlayerSpells(level: number) {
@@ -54,16 +59,21 @@ export default class Level {
 
     private static getEnemySpellSequences(level: number, player: Character, enemy: Enemy): SpellSequence[] {
         const sequences = [
-            new SpellSequence(1, [enemy, new Protectio(), new Ignis()]),
+            new SpellSequence(1, [player, new Impetus()]),
+            new SpellSequence(1, [enemy, new Protectio()]),
+
+            new SpellSequence(2, [enemy, new Protectio(), new Aquae()]),
             new SpellSequence(2, [player, new Impetus(), new Ignis()]),
+            new SpellSequence(2, [player, new Impetus(), new Aquae()]),
         ];
 
         return sequences.filter(s => s.level <= level);
     }
 
-    static createLevel(level: number): Level {
+    // todo: pass player through instead of re-creating
+    static createLevel(level: number, playerName: string): Level {
         const spells = Level.getPlayerSpells(level);
-        const player = Level.createPlayer(spells);
+        const player = Level.createPlayer(spells, playerName);
         const enemy = Level.createEnemy(level);
         const spellSequences = Level.getEnemySpellSequences(level, player, enemy);
         enemy.startSpellCasting(player, spellSequences);

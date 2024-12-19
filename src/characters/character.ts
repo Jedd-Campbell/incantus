@@ -45,13 +45,19 @@ export default class Character {
 
     applyDamage(effect: SpellEffect) {
         this.applyShieldBlock(effect);
-
-        this.stats.health = Math.max(0, this.stats.health - effect.damage);
+        if(!this.applyShieldReflect(effect)) {
+            this.stats.health = Math.max(0, this.stats.health - effect.damage);
+            if (effect.ticks === 0) {
+                this.removeSpellEffect(effect);
+            }
+        }
     }
 
     private applyShieldBlock(effect: SpellEffect) {
-        const shieldEffect = this.effects.find((e) => e.intent.name === "protectio" && e.root?.name === effect?.root?.inverse?.name);
-        if (shieldEffect) {
+        const shieldEffect = this.effects.find((e) => e.intent.name === "protectio");
+
+        // Block Damage
+        if (shieldEffect && shieldEffect.root?.name === effect?.root?.inverse?.name) {
             const blockAmount = Math.max(0, shieldEffect.blockAmount - effect.damage);
             const damage = Math.max(0, effect.damage - shieldEffect.blockAmount);
             effect.damage = damage;
@@ -60,6 +66,17 @@ export default class Character {
                 this.removeSpellEffect(shieldEffect);
             }
         }
+    }
+
+    private applyShieldReflect(effect: SpellEffect): boolean {
+        const shieldEffect = this.effects.find((e) => e.intent.name === "protectio");
+
+        // Reflect Projectile
+        if (shieldEffect && shieldEffect.root?.name === effect?.root?.name) {
+            effect.intent.spellObject.dir = k.vec2(-effect.intent.spellObject.dir.x, effect.intent.spellObject.dir.y);
+            return true;
+        }
+        return false
     }
 
     // todo: Move stuff to UI class
@@ -81,7 +98,7 @@ export default class Character {
                 castPoint,
                 stats: this.stats,
             }
-        ]);        
+        ]);
 
         // Cast Bar
         const castBarWidth = 75;

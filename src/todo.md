@@ -6,8 +6,8 @@
 [x] Victory and Defeat
 [ ] Flesh out spell library and interactions
 [ ] Add basic spell effect visuals
-[ ] Add basic level/progression system
-[ ] Add basic spell book 
+[x] Add basic level/progression system
+[x] Add basic spell book 
 
 ### Would be nice
 [ ] Add items/artifacts that give you spell modifiers
@@ -17,6 +17,6 @@
 ### Polish
 [ ] Make menu pretty
 [ ] Add nice back grounds (grass, forest, mountain, cave, lava, castle)
-[ ] Consistent battlefield size
+[x] Consistent battlefield size
 [ ] Voice and sound effects
 [ ] Select a name as difficulty

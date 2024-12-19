@@ -1,23 +1,19 @@
 import k from "../kaplay";
+import Ignis from "./ignis";
 import Spell from "./spell";
 import SpellEffect from "./spell-effect";
+import { SpellType } from "./spell-type";
 
-export default class Aquae implements Spell {
+export default class Aquae extends Spell {
 
-    constructor() {
-        this.name = "aquae";
+    constructor(hasInverse: boolean = true) {
+        const inverse = hasInverse ? new Ignis(false) : null;
+        super("aquae", "water", SpellType.Root, 0, inverse);
     }
 
-    name: string;
-
-    modifySpellEffect(effect: SpellEffect) {
-        effect.root = this;
-    }
-
-    shader() {
-        return k.shader(this.name, () => ({
-            u_time: k.time(),
-        }));
+    invokeSpellEffect(effect: SpellEffect) {
+        // todo: fizzle
+        // does nothing
     }
 
     sprite() {

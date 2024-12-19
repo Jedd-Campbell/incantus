@@ -10,17 +10,15 @@ export default class SpellCastResolver {
 
     caster: Character;
     targets: Character[] = [];
-    spells: Spell[] = [];
+    chain: (Spell | Character)[] = [];
 
     targetsMatch: any[] = [];
     spellsMatch: any[] = [];
 
-    utterances: (Spell | Character)[] = [];
     command: string = "";
 
-    constructor(caster: Character, spells: Spell[], targets: Character[]) {
+    constructor(caster: Character, targets: Character[]) {
         this.caster = caster;
-        this.spells = spells;
         this.targets = targets;
     }
 
@@ -53,10 +51,10 @@ export default class SpellCastResolver {
             if (key === "space" || key === "enter") {
                 if (this.fullMatch()) {
                     if (this.spellsMatch?.length > 0) {
-                        this.utterances.push(this.spellsMatch[0]);
+                        this.chain.push(this.spellsMatch[0]);
                     }
                     if (this.targetsMatch?.length > 0) {
-                        this.utterances.push(this.targetsMatch[0]);
+                        this.chain.push(this.targetsMatch[0]);
                     }
                 }
                 this.command = "";
@@ -67,15 +65,15 @@ export default class SpellCastResolver {
     private resolveCast(key: Key) {
         if (key === "enter") {
             let spellEffect = new SpellEffect(this.caster);
-            spellEffect.parseUtterances(this.utterances);
+            spellEffect.parseSpellChain(this.chain);
 
             // Reset caster
             this.resolved = true;
             this.previousKey = "";
             this.command = "";
             this.targetsMatch = this.targets;
-            this.spellsMatch = this.spells;
-            this.utterances = [];
+            this.spellsMatch = this.caster.spells;
+            this.chain = [];
         }
     }
 
@@ -85,19 +83,19 @@ export default class SpellCastResolver {
         }
 
         const match = this.command + key;
-        const isSpellMatch = this.spells?.some((s) => s.name?.toLowerCase().slice(0, match.length) === match);
+        const isSpellMatch = this.caster.spells?.some((s) => s.name?.toLowerCase().slice(0, match.length) === match);
         const isTargetMatch = this.targets?.some((t) => t.name?.toLowerCase().slice(0, match.length) === match);
         return isSpellMatch || isTargetMatch;
     }
 
     private fullMatch() {
         const match = this.command;
-        this.spellsMatch = this.spells?.filter((s) => s.name?.toLowerCase() === match);
+        this.spellsMatch = this.caster.spells?.filter((s) => s.name?.toLowerCase() === match);
         this.targetsMatch = this.targets?.filter((t) => t.name?.toLowerCase() === match);
         return this.spellsMatch?.length > 0 || this.targetsMatch?.length > 0;
     }
 
     setCastText() {
-        this.caster.gameObject.castText = this.utterances.map(i => i.name).join(" ") + " " + this.command;
+        this.caster.gameObject.castText = (this.chain.map(i => i.name).join(" ") + " " + this.command).toLowerCase();
     }
 }

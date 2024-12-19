@@ -3,39 +3,20 @@ import SpellCastResolver from "../spells/spell-cast-resolver";
 import Player from "../characters/player";
 import Enemy from "../characters/enemy";
 import Stats from "../characters/stats";
-import Ignis from "../spells/ignis";
-import Aquae from "../spells/aquae";
-import Impetus from "../spells/impetus";
-import Impedio from "../spells/impedio";
 import Utils from "../utils";
+import SpellBook from "../spells/spell-book";
+import Level from "../level";
 
 k.scene("game", (args) => {
     // k.debug.inspect = true;
-    const projectileSpeed = 1500;
 
-    const names = ["Eric", "Admus", "Narkin", "Hazelix", "Seldrest", "Moradeane"];
-    const nameIndex = Utils.randomInteger(0, names.length - 1);
 
-    const player = new Player(names[nameIndex], new Stats(), new Stats());
-    const enemy = new Enemy("Dummy", new Stats(), new Stats());
-    const targets = [player, enemy];
-    const spells = [
-        // intents
-        new Impetus(),
-        new Impedio(),
-
-        // roots
-        new Ignis(),
-        new Aquae(),
-    ];
-
-    let incantation = new SpellCastResolver(player, spells, targets);
-
-    // enemy.startSpellCasting(player);
+    const level = Level.createLevel(args.level);
+    const resolver = new SpellCastResolver(level.player, [level.player, level.enemy]);
 
     // Controls
     k.onKeyPress((key) => {
-        incantation.parse(key);
+        resolver.parse(key);
     });
     k.onKeyPress("escape", () => {
         k.go("menu");
@@ -43,17 +24,30 @@ k.scene("game", (args) => {
 
     // Game logic
     k.onUpdate(() => {
-        if (player.stats.health <= 0) {
-            k.go("defeat", { enemy });
+        if (level.player.stats.health <= 0) {
+            k.go("defeat", { level });
         }
-        if (enemy.stats.health <= 0) {
-            k.go("victory", { enemy, level: args.level });
+        if (level.enemy.stats.health <= 0) {
+            k.go("victory", { level });
         }
     });
 
-    k.onCollide("character", "projectile", (a, b) => {
-        b.hit = true;
-        b.destroy();
-        a.stats.health = Math.max(0, a.stats.health - 10);
-    })
+    // environment
+    k.add([
+        k.sprite("ground"),
+        k.z(10),
+        k.pos(k.width() / 2, k.height() / 2),
+        k.anchor("center"),
+        k.scale(),
+    ]);
+
+    // ui
+    k.add([
+        k.text("Level " + args.level, { size: 24 }),
+        k.color(255, 255, 255),
+        k.pos(50, 50),
+        k.anchor("topleft"),
+        k.z(20),
+    ]);
+    SpellBook.showSpellBook(level.player.spells);
 })

@@ -1,10 +1,11 @@
 import Character from "../characters/character";
 import k from "../kaplay";
+import Level from "../level";
 
-k.scene("defeat", (args: {enemy: Character}) => {
+k.scene("defeat", (args: {level: Level}) => {
     // k.debug.inspect = true;
     k.add([
-        k.text("Defeated by " + args.enemy.name, { size: 60 }),
+        k.text("Defeated by " + args.level.enemy.name, { size: 60 }),
         k.color(201, 29, 20),
         k.pos(k.width() / 2, k.height() / 2 - 100),
         k.anchor("center"),
@@ -18,7 +19,7 @@ k.scene("defeat", (args: {enemy: Character}) => {
     ]);
 
     k.add([
-        k.sprite(args.enemy.sprite),
+        k.sprite(args.level.enemy.sprite),
         k.pos(k.width() / 2, k.height() / 2 + 80),
         k.anchor("center"),
         k.scale(2)

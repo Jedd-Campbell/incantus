@@ -1,43 +1,39 @@
-import { GameObj } from "kaplay";
 import Character from "../characters/character";
 import k from "../kaplay";
 import VFX from "../vfx/vfx";
+import Impetus from "./impetus";
 import Spell from "./spell";
 import SpellEffect from "./spell-effect";
 import { SpellType } from "./spell-type";
-import Protectio from "./protectio";
 
-export default class Impetus extends Spell {
+export default class Protectio extends Spell {
 
     constructor(hasInverse: boolean = true) {
-        const inverse = hasInverse ? new Protectio(false) : null;
-        super("impetus", "attack", SpellType.Intent, 0, inverse);
+        const inverse = hasInverse ? new Impetus(false) : null;
+        super("protectio", "shield", SpellType.Intent, 1, inverse);
     }
 
     modifySpellEffect(effect: SpellEffect, chain: (Spell | Character)[]) {
         super.modifySpellEffect(effect, chain);
-        effect.damage += 10;
+        effect.ticks += 10;
+        effect.blockAmount += 10;
+        effect.maxBlockAmount += 10;
     }
 
     invokeSpellEffect(effect: SpellEffect) {
-
         // Fizzle
         if (!effect.target) {
             super.invokeSpellEffect(effect);
             return;
         }
 
-        this.spellObject = VFX.createProjectile(
-            effect.caster.gameObject.castPoint,
+        this.spellObject = VFX.createShield(
             effect.target.gameObject.pos,
             effect.intent?.sprite() ?? this.sprite(),
-            10, // max projectile lifetime
-            800, // projectile speed
+            effect.ticks
         );
-        this.spellObject.onCollide("character", (target: GameObj) => {
-            this.spellObject.destroy();
-            effect.target.applyDamage(effect);
-        });
+
+        effect.target.addSpellEffect(effect);
     }
 
     sprite() {
